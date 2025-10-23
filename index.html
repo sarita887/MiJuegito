@@ -166,7 +166,7 @@
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
-
+  
   .heart-float {
     position: absolute;
     font-size: 20px;
@@ -365,12 +365,11 @@ musicBtn.addEventListener("click", ()=>{
     youtubePlaying = true;
     musicBtn.textContent = "🔊";
   } else {
-    ytPlayer.src = ""; // pausa el video
+    ytPlayer.src = ""; 
     youtubePlaying = false;
     musicBtn.textContent = "🔇";
   }
 });
-
 moveHeart();
 </script>
 </body>
