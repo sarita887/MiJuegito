@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atrapa mi corazón ❤️</title>
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background: linear-gradient(135deg, #634e94, #d19ec3);
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    color:#0a0e06;
+  }
+
+  .game{
+    position:relative;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+  }
+
+  .heart{
+    position:absolute;
+    font-size:90px;
+    cursor:pointer;
+    animation:bounce 1s ease-in-out infinite alternate;
+    user-select:none;
+  }
+  @keyframes bounce{
+    from{transform:translateY(0);}
+    to{transform:translateY(-15px);}
+  }
+
+  .hint{
+    position:absolute;
+    top:-35px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#dfcdcd;
+    color:#020202;
+    font-weight:700;
+    padding:5px 10px;
+    border-radius:999px;
+    box-shadow:0 5px 10px rgba(9, 15, 22, 0.2);
+    font-size:13px;
+  }
+
+  .score{
+    position:absolute;
+    top:10px;
+    left:10px;
+    background:rgba(255,255,255,0.2);
+    padding:6px 10px;
+    border-radius:8px;
+    font-weight:bold;
+    backdrop-filter:blur(4px);
+  }
+
+  .panel{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    background:rgba(36, 27, 27, 0.15);
+    backdrop-filter:blur(10px);
+    border-radius:20px 20px 0 0;
+    padding:15px;
+    box-shadow:0 -4px 20px rgba(0,0,0,0.25);
+  }
+
+  .panel h3{
+    margin:0 0 10px;
+    font-size:16px;
+    text-align:center;
+  }
+
+  .phrase{
+    background:rgba(255,255,255,0.25);
+    padding:10px;
+    border-radius:10px;
+    text-align:center;
+    font-weight:600;
+    margin-bottom:10px;
+  }
+
+  form{
+    display:flex;
+    gap:8px;
+  }
+
+  input{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    outline:none;
+  }
+
+  button{
+    background:#bd275e;
+    border:none;
+    border-radius:8px;
+    color:#fff;
+    font-weight:bold;
+    padding:10px 14px;
+    cursor:pointer;
+  }
+
+  .feedback{
+    text-align:center;
+    margin-top:8px;
+    min-height:20px;
+    font-weight:600;
+  }
+
+  .ok{color:#131d10;}
+  .err{color:#0e0c0c;}
+
+  .final{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    color:#afa4a4;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.8s;
+  }
+
+  .final.show{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .final h2{font-size:24px;margin-bottom:10px;}
+  .final p{font-size:18px;}
+
+  @media (max-height:600px){
+    .heart{font-size:70px;}
+  }
+
+  /* Fondo animado final */
+  body.final-bg {
+    background: linear-gradient(135deg, #2c0735, #3a1c71, #d76dae98, #5e3d92);
+    background-size: 300% 300%;
+    animation: gradientShift 10s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .heart-float {
+    position: absolute;
+    font-size: 20px;
+    color: #ff4d6d;
+    opacity: 0.9;
+    animation: moveHeart 8s ease-in-out infinite, blink 2s infinite alternate;
+    user-select: none;
+    z-index: 2;
+  }
+
+  @keyframes moveHeart {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 0.7; }
+    25% { transform: translate(30px, -40px) rotate(15deg); }
+    50% { transform: translate(-30px, -80px) rotate(-15deg); opacity: 1; }
+    75% { transform: translate(40px, -40px) rotate(10deg); }
+    100% { transform: translate(0, -100px) rotate(0deg); opacity: 0.5; }
+  }
+
+  @keyframes blink {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+  }
+
+  .star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: twinkle 1.5s infinite ease-in-out;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.4); }
+  }
+
+  /* 🎵 Botón de música */
+  #music-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.25);
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s;
+    z-index: 9999;
+  }
+  #music-btn:hover {
+    transform: scale(1.1);
+  }
+</style>
+</head>
+<body>
+  <div class="game" id="game">
+    <div class="score" id="score">Frases correctas: 0</div>
+    <div class="heart" id="heart">
+      <div class="hint">Haz click 💖</div>
+      💗
+    </div>
+
+    <div class="panel" id="panel">
+      <h3>Escribe la frase que te pide:</h3>
+      <div class="phrase" id="phraseDisplay">Toca el corazón para comenzar 💗</div>
+      <form id="form">
+        <input type="text" id="input" placeholder="Escribe aquí...">
+        <button>Enviar</button>
+      </form>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="final" id="final">
+      <h2>😏 Ya ves amor...</h2>
+      <p>te dije que en esta relación soy yo la que manda 😘💖</p>
+    </div>
+  </div>
+
+  <!-- 🎶 Reproductor oculto de YouTube -->
+  <div id="yt-container" style="position: fixed; width:0; height:0; overflow:hidden;">
+    <iframe id="yt-player" width="0" height="0" frameborder="0" allow="autoplay"></iframe>
+  </div>
+
+  <!-- 🎵 Botón de música -->
+  <button id="music-btn">🎵</button>
+
+<script>
+const heart = document.getElementById("heart");
+const game = document.getElementById("game");
+const scoreEl = document.getElementById("score");
+const phraseDisplay = document.getElementById("phraseDisplay");
+const form = document.getElementById("form");
+const input = document.getElementById("input");
+const feedback = document.getElementById("feedback");
+const final = document.getElementById("final");
+const musicBtn = document.getElementById("music-btn");
+const ytPlayer = document.getElementById("yt-player");
+
+let score = 0;
+const goal = 5;
+const phrases = ["te amo","te quiero","me encantas","mi amor","mi vida","mi guapa","mi reina","mi princesa"];
+let currentPhrase = "";
+let youtubePlaying = false;
+const videoId = "S_9qN7vwMbM"; // 💖 ID del video de YouTube
+
+function moveHeart(){
+  const maxX = game.clientWidth - 90;
+  const maxY = game.clientHeight - 300; 
+  const x = Math.random()*maxX;
+  const y = Math.random()*maxY;
+  heart.style.left = x+"px";
+  heart.style.top = y+"px";
+}
+
+function askPhrase(){
+  currentPhrase = phrases[Math.floor(Math.random()*phrases.length)];
+  phraseDisplay.textContent = `Escribe: "${currentPhrase}"`;
+  feedback.textContent = "";
+  input.value="";
+  input.focus();
+}
+
+function normalize(s){
+  return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+}
+
+heart.addEventListener("click", ()=>{
+  askPhrase();
+  if(!youtubePlaying){
+    ytPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
+    youtubePlaying = true;
+    musicBtn.textContent = "🔊";
+  }
+});
+
+form.addEventListener("submit", e=>{
+  e.preventDefault();
+  if(!currentPhrase) return feedback.textContent="Primero toca el corazón 💗";
+  if(normalize(input.value)===normalize(currentPhrase)){
+    score++;
+    scoreEl.textContent=`Frases correctas: ${score}`;
+    feedback.textContent="¡Correcto! ❤️";
+    feedback.className="feedback ok";
+    if(score>=goal){
+      mostrarFinal();
+    }else{
+      setTimeout(()=>{ moveHeart(); askPhrase(); },400);
+    }
+  }else{
+    feedback.textContent="No coincidió 💌";
+    feedback.className="feedback err";
+  }
+});
+
+function mostrarFinal(){
+  final.classList.add("show");
+  heart.style.display="none";
+  document.getElementById("panel").style.display="none";
+  document.body.classList.add("final-bg");
+
+  for (let i = 0; i < 25; i++) {
+    const heart = document.createElement("div");
+    heart.classList.add("heart-float");
+    heart.innerHTML = "💘";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.top = Math.random() * 100 + "vh";
+    heart.style.animationDuration = 6 + Math.random() * 5 + "s";
+    heart.style.animationDelay = Math.random() * 5 + "s";
+    document.body.appendChild(heart);
+  }
+
+  for (let i = 0; i < 40; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.animationDelay = Math.random() * 3 + "s";
+    document.body.appendChild(star);
+  }
+}
+
+// 🎶 Botón para pausar/reanudar música
+musicBtn.addEventListener("click", ()=>{
+  if(!youtubePlaying) {
+    ytPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
+    youtubePlaying = true;
+    musicBtn.textContent = "🔊";
+  } else {
+    ytPlayer.src = ""; // pausa el video
+    youtubePlaying = false;
+    musicBtn.textContent = "🔇";
+  }
+});
+
+moveHeart();
+</script>
+</body>
+</html>
